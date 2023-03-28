@@ -190,14 +190,13 @@ const updateQR = (data) => {
 
 // send text message to wa user
 app.post("/send-message", async (req, res) => {
-    //console.log(req);
-    const message = req.body.message;
-    const number = req.body.phoneNumber;
+    console.log(req.body);
+    const { phoneNumber, uniqueID = '000000' } = req.body;
 
 
     let numberWA;
     try {
-        if (!number) {
+        if (!phoneNumber) {
             res.status(500).json({
                 status: false,
                 response: 'No hay numero!'
@@ -205,10 +204,10 @@ app.post("/send-message", async (req, res) => {
         }
         else {
             // numberWA = '62' + number.substring(1) + "@s.whatsapp.net"; 
-            numberWA = number + "@s.whatsapp.net";
+            numberWA = phoneNumber + "@s.whatsapp.net";
 
             console.log(await client.onWhatsApp(numberWA));
-            client.sendMessage(numberWA, { text: message })
+            client.sendMessage(numberWA, { text: `¡Hola! Gracias por realizar tu pedido con nosotros. Nos complace confirmar que hemos recibido tu pedido con el número de orden #${uniqueID} y estamos trabajando diligentemente para prepararlo y enviarlo lo antes posible. Si tienes alguna pregunta o inquietud sobre tu pedido, no dudes en ponerte en contacto con nosotros con el número de orden correspondiente. ¡Gracias por elegirnos!` })
                 .then((result) => {
                     res.status(200).json({
                         status: true,
